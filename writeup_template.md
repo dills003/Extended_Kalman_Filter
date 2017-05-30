@@ -1,14 +1,10 @@
-## **Vehicle Detection Project**
+## **Extended Kalman Filter**
 
-Once again, without all of the lectures and quizes in this module, I would not have stood a chance. I used a couple of different files to complete this project. I used the notebook titled, "P5test.ipynb" to do my initial work and picture grabbing and a second titled, "P5Video.ipynb" to create my video output file named, "myVideo_finalt1RBF.mp4". 
+Once again, without all of the lectures and quizes in this module, I would not have stood a chance. I used a couple of different files to complete this project. The source code for this project can be found in the src folder of this repository.
 
 The goals / steps of this project are the following:
 
-* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier.
-* Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector. 
-* Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
-* Run your pipeline on a video stream (start with the test_video.mp4 and later implement on full project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
-* Estimate a bounding box for vehicles detected.
+* The goal of this project is to implement an Extended Kalman filter in C++. I was provided simulated lidar and radar measurements detecting a bicycle (graphic is a car though?) that travels around a vehicle. I used a Kalman filter, lidar measurements, and radar measurements to track the bicycle's(possibly a car's) position and velocity.
 
 [//]: # (Image References)
 [image1]: ./output_images/yChannelHog.png "Y-Channel Car"
