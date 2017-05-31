@@ -7,76 +7,30 @@ The goals / steps of this project are the following:
 * The goal of this project is to implement an Extended Kalman filter in C++. I was provided simulated lidar and radar measurements detecting a bicycle (graphic is a car though?) that travels around a vehicle. I used a Kalman filter, lidar measurements, and radar measurements to track the bicycle's(possibly a car's) position and velocity.
 
 [//]: # (Image References)
-[image1]: ./output_images/yChannelHog.png "Y-Channel Car"
-[image2]: ./output_images/crChannelHog.png "y-Channel Not Car"
-[image3]: ./output_images/cbChannelHog.png "Cb-Channel"
-[image4]: ./output_images/myGrid.png "My Search Grid"
-[image5]: ./output_images/preHeatMap.png "Pre-Heat Map"
-[image6]: ./output_images/heatMapped.png "Post-Heat Map"
-[image7]: ./examples/heatMapped.png "Post Heat Map"
-[video1]: ./myVideo_finalt1RBF.mp4
-[video2]: ./myVideo_finalt2LIN.mp4
-[video3]: ./myVideo_ma5t3LIN.mp4
-
+[image1]: ./Runs/Dataset1.png "Dataset #1"
+[image2]: ./Runs/Dataset2.png "Dataset #2"
 
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
 Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
-# Writeup / README
 
-1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.
+# Your code should compile
 
-You're reading it!
+1. Code must compile with cmake and make.
 
-# Histogram of Oriented Gradients (HOG)
+This was my first time using cmake and make. After getting everything loaded into Windows correctly, I still had issues trying to run it from the Windows command prompt. I then discovered Windows 10 has 'Bash on Ubuntu for Windows". Thank goodness, because everything worked fine when I use that. No changes were made to the CMakeLists.txt file, so it should be good to go on any platform
 
-1. Explain how (and identify where in your code) you extracted HOG features from the training images.
+# px, py, vx, vy output coordinates must have an RMSE <= [.11, .11, 0.52, 0.52] 
 
-The code for this step is contained in the third code cell of the 'P5Video' IPython notebook, named "Step 2: Choose and Train Colorspace and SVM."  The method for this was taken directly from lecture. 
+1. Your algorithm will be run against Dataset 1 in the simulator which is the same as "data/obj_pose-laser-radar-synthetic-input.txt" in the repository. We'll collect the positions that your algorithm outputs and compare them to ground truth data. Your px, py, vx, and vy RMSE should be less than or equal to the values [.11, .11, 0.52, 0.52].
 
-I started by reading in all the `vehicle` and `non-vehicle` images. 
-
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed an image from the car class and displayed them to get a feel for what the `skimage.hog()` output looks like.
-
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`. The images are of a car and a non-car in the 'Y' colorspace hogged:
+I passed while using Dataset #1, and just missed when using Dataset #2. Below are my results
 
 ![alt text][image1]
 
 ![alt text][image2]
-
-
-
-2. Explain how you settled on your final choice of HOG parameters.
-
-I tried various combinations of colorspaces and parameters. The parameter testing came after I slected a classifier. I ended up on settling on all the three channels from the YCrCb colorspace. I know in a real situation using all three color channels is probably not going to work, because it is about speed and accuracy. For this project I tried to focus more on accuracy, because I figured speed would come more easily if I knew what was going on. Using one color channel versus three dropped my 'time to extract' from 52 seconds to 26 seconds for my training data. Therefore, I could probably count on HOG extraction to be about twice as fast if I use one channel versus three. I did my colorspace testing using a Linear SVC model. Looking back, this is not a good scientific way to do this. I am sure each colorspace works better with different classifiers. The problem was that accuracy numbers were so good, that I got carried away without using the scientific method. Shown below is some of my testing:
-
-| Colorspace      | Accuracy   | Model   | Time to Classify 10 items (s) |  
-|:-------------:|:-------------:| :-------------:| :-------------:| 
-| Grayscale      | 0.9505        | LinearSVC(C=1) | .01701 |
-| RGB      | 0.9675        | LinearSVC(C=1) | .016021 |
-| HSV      | 0.9818       | LinearSVC(C=1) | .01301 |
-| LUV      | 0.9843        | LinearSVC(C=1) | .01802 |
-| HLS     | 0.9843        | LinearSVC(C=1) | .01301 |
-| YUV     | 0.9872       | LinearSVC(C=1) | .01301 |
-| YCrCb      | 0.9875       | LinearSVC(C=1) | .01301 |
-
-
-After I decided on the YCrCb colorspace, I played with the orientation, pix per cell, cells per block, but had the best success with the 9, 8, 2 setup that was shown to us in lecture.
-
-3. Describe how (and identify where in your code) you trained a classifier.
-
-I trained a classifer using my Orientation = 9, Pix/Cell = 8, and Cell/Block = 2 HOG features . I chose an SVC with an RBF kernel(C=10), just because it had the highest accuracy when tested and it made the nicest video. I know that his is not a real plausible solution after seeing how slow it ran very, very slow. Below is a table I used to help me:
-
-| Colorspace      | Accuracy   | Model   | Time to Classify 10 items (s) |  
-|:-------------:|:-------------:| :-------------:| :-------------:| 
-| YCrCb      | 0.9875       | LinearSVC(C=1) | .01301 |
-| YCrCb      | 0.9843       | SVC(C=.1) - RBF | .2011 |
-| YCrCb      | 0.9937       | SVC(C=1) - RBF| .1381 |
-| YCrCb      | 0.9949      | SVC(C=10) - RBF | .1401 |
-
-I also trained a LinearSVC, but didn't really like how the thresholding and video turned out. It was much faster, but wasn't as nice. I know this is a balance, but I lost out on speed.
 
 ## Sliding Window Search
 
@@ -120,7 +74,12 @@ I used the heat mapping threshold idea shown in lecture. The code for this can b
 
 ![alt text][image6]
 ---
-
+| RSME Dataset #1 |  
+|:-------------:|:-------------:|  
+| px     | 0.9505        | 
+| py     | 0.9675        | 
+| vx     | 0.9818       | 
+| vy     | 0.9843        | 
 ---
 
 ### Discussion
