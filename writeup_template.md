@@ -27,7 +27,7 @@ This was my first time using cmake and make. After getting everything loaded int
 
 1. Your algorithm will be run against Dataset 1 in the simulator which is the same as "data/obj_pose-laser-radar-synthetic-input.txt" in the repository. We'll collect the positions that your algorithm outputs and compare them to ground truth data. Your px, py, vx, and vy RMSE should be less than or equal to the values [.11, .11, 0.52, 0.52].
 
-I passed while using Dataset #1, and just missed when using Dataset #2. Below are my results:
+I passed while using Dataset #1, and just missed when using Dataset #2, unless rounding is allowed. Below are my results:
 
  Dataset 1
 ![alt text][image1]
@@ -39,19 +39,38 @@ I passed while using Dataset #1, and just missed when using Dataset #2. Below ar
 
 1. Follows general processing as taught in the lessons.
 
-I decided to search window positions at fixed scale and location. I made a giant, oversized grid. I think I ended up with 488 different boxes to search. I went with three layers of boxes, because one wasn't cutting it. I also used rectangular boxes instead of square, because that is how the car looked to me. I honestly did a bunch of 'guess and check' over the test images until I found a solution that worked. The code for this can be found in the fifth code cell of the 'P5Video' IPython notebook, named "Step 3: Create Pipeline and Function Classes."  Below is an example an image of search grid:
+My program follows the general processing as taught in the lessons. My program:
+ 1. Takes in a first measurement
+ 2. Initializes the State and State Covariance matricies
+ 3. Takes in another measurement
+ 4. Updates the Process Covariance matrix
+ 5. Predicts the State and State Covariance matrices
+ 6. Finds the loss (Difference from Prediction and what Sensor says) 
+ 7. Finds the new Kalman Gain (how much weight to give the Prediction or Sensor)
+ 8. Gives a new estimate of the State and State Covariance matricies
+ 9. Returns to step #3 and keeps repeating
 
+This can be found in FusionEKF.cpp and kalman_filter.cpp files in the src folder.
 
 2. Kalman Filter handles the first measurements properly.
 
-Ultimately I searched on all of the YCrCb 3-channel HOG features. To improve the reliability of the classifier i.e., fewer false positives and more reliable car detections I made sure I scalled the HOG features that I found and also set the feature_vec of the hog function to true. This "returns the data as a feature vector by calling .ravel() on the result just before returning". The goal was to input video data the same way as the SVC trained.
+This is shown in lines 80-125 fo the FusionEKF.cpp file. Weather it be a lidar or radar sensor that is read first, I initialize px and py from the sensor only. Lidar only gives position and Radar, enough though it has range rate, it does not contain enough information to determine velocities (From the 'Tips and Tricks'). Therefore, I intialize the velocites, vx and vy, to 2. I played with a few numbers, but 2 worked the best. 
 
 3. Kalman Filter first predicts then updates.
 
+This is shown in lines 160-190 fo the FusionEKF.cpp file. It calls .Predict() first and then it calls an update based on the sensor that is giving us the data.
 
 4. Kalman Filter can handle radar and lidar measurements.
 
+This is shown in lines 30-102 of the kalman_filter.cpp file. I added an 'UpdateShared' function to the KalmanFilter class. I did this because the lidar and radar share the same update steps once the loss is found and it made it easier to bail out of a radar update if px or py where really close to their respective axis (lines 65-87). Looking back I proabably would have done more math in the FusionEKF.cpp file to weed out potential issues, but this was an okay solution. I also fix really large or small theta values (sorry for not using phi, I think flux when I hear that word. Electrical Engineering did this to me.) in this same block of code.
+
+# Smell Test
+1. For not using C++ in 7 years, this was rough to follow at first. I can't wait to improve.
 
 ### Discussion
+Kalman Filter, what an amazing tool! In four years of Engineering school and a few Graduate Robotics courses, I can't believe this was not introduced. Once you get past all of the goofy nomenclature (Q = Process Covariance and P = State Covariance) and scripting, it such a powerful simple tool for tracking. Up to this point, I only relied upon what a sensor was telling me. 
+
+For improvment on this project, I would probably start by filtering out some of the radar sensor readings. Some of them were pretty far off the path.
+
 
 
