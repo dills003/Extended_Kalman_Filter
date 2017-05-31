@@ -40,15 +40,15 @@ I passed while using Dataset #1, and just missed when using Dataset #2, unless r
 1. Follows general processing as taught in the lessons.
 
 My program follows the general processing as taught in the lessons. My program:
- 1. Takes in a first measurement
- 2. Initializes the State and State Covariance matricies
- 3. Takes in another measurement
- 4. Updates the Process Covariance matrix
- 5. Predicts the State and State Covariance matrices
- 6. Finds the loss (Difference from Prediction and what Sensor says) 
- 7. Finds the new Kalman Gain (how much weight to give the Prediction or Sensor)
- 8. Gives a new estimate of the State and State Covariance matricies
- 9. Returns to step #3 and keeps repeating
+      1. Takes in a first measurement
+      2. Initializes the State and State Covariance matricies
+      3. Takes in another measurement
+      4. Updates the Process Covariance matrix
+      5. Predicts the State and State Covariance matrices
+      6. Finds the loss (Difference from Prediction and what Sensor says) 
+      7. Finds the new Kalman Gain (how much weight to give the Prediction or Sensor)
+      8. Gives a new estimate of the State and State Covariance matricies
+      9. Returns to step #3 and keeps repeating
 
 This can be found in FusionEKF.cpp and kalman_filter.cpp files in the src folder.
 
