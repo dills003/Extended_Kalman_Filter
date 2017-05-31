@@ -7,8 +7,9 @@ The goals / steps of this project are the following:
 * The goal of this project is to implement an Extended Kalman filter in C++. I was provided simulated lidar and radar measurements detecting a bicycle (graphic is a car though?) that travels around a vehicle. I used a Kalman filter, lidar measurements, and radar measurements to track the bicycle's(possibly a car's) position and velocity.
 
 [//]: # (Image References)
-[image1]: ./Runs/Dataset1.png "Dataset #1"
-[image2]: ./Runs/Dataset2.png "Dataset #2"
+
+[image1]: ./Runs/Dataset1.png "Dataset 1"
+[image2]: ./Runs/Dataset2.png "Dataset 2"
 
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
@@ -26,7 +27,7 @@ This was my first time using cmake and make. After getting everything loaded int
 
 1. Your algorithm will be run against Dataset 1 in the simulator which is the same as "data/obj_pose-laser-radar-synthetic-input.txt" in the repository. We'll collect the positions that your algorithm outputs and compare them to ground truth data. Your px, py, vx, and vy RMSE should be less than or equal to the values [.11, .11, 0.52, 0.52].
 
-I passed while using Dataset #1, and just missed when using Dataset #2. Below are my results
+I passed while using Dataset #1, and just missed when using Dataset #2. Below are my results:
 
 ![alt text][image1]
 
