@@ -8,11 +8,11 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./Runs/Dataset1.png "Dataset 1"
-[image2]: ./Runs/Dataset2.png "Dataset 2"
+[image1]: ./Runs/Dataset1.PNG "Dataset 1"
+[image2]: ./Runs/Dataset2.PNG "Dataset 2"
 
 
-## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
+## [Rubric](https://review.udacity.com/#!/rubrics/748/view) Points
 Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
